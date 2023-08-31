@@ -7,4 +7,4 @@ RUN apt-get autoremove --purge -y curl && \
     apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 EXPOSE 6379
-CMD ["redis-server", "--protected-mode no"]
+CMD ["redis-server","/usr/local/etc/redis/redis.conf","daemonize no"]
