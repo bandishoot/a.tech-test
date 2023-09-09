@@ -1,10 +1,14 @@
 FROM debian:latest
 
-RUN apt update -y && apt install -y ca-certificates curl procps iproute2 redis 
+RUN apt-get update && apt-get install -y redis-server openssl
 
-RUN apt-get autoremove --purge -y curl && \
-    apt-get update && apt-get upgrade -y && \
-    apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+COPY redis.conf /etc/redis/redis.conf
+
+COPY tls/ca-cert.pem /etc/ssl/redis-server-crt.pem
+COPY tls/ca-key.pem /etc/ssl/redis-server-key.pem
+COPY tls/ca-cert.pem /etc/ssl/ca-cert.pem
 
 EXPOSE 6379
-CMD ["redis-server","/usr/local/etc/redis/redis.conf","daemonize no"]
+EXPOSE 6380
+
+CMD ["redis-server", "/etc/redis/redis.conf"]
